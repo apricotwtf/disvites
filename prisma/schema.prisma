@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id Int @default(autoincrement()) @id
+  discordId String @unique
+
+  invites GuildInvite[]
+
+  blacklisted Boolean
+}
+
+model GuildInvite {
+  id Int @default(autoincrement()) @id
+
+  guildId Int
+  guild Guild? @relation(references: [id], fields: [guildId])
+
+  expires DateTime
+  maxUses Int @default(0) // if it is 0, uses are infinite
+  uses Int @default(0)
+
+  path String
+  subdomain Subdomain? @relation(references: [name], fields: [subdomainName])
+  subdomainName String
+
+  invites DiscordInvite[]
+
+  @@unique([subdomainName, path])
+}
+
+model DiscordInvite {
+  id Int @default(autoincrement()) @id
+  discordInviteId String @unique
+
+  guildInvite GuildInvite? @relation(references: [id], fields: [guildInviteId])
+  guildInviteId Int
+
+  guildId String
+
+  uses Int @default(0)
+
+  issued DateTime @default(now())
+}
+
+model Domain {
+  name String @default("apricot.wtf") @id
+
+  subdomains Subdomain[]
+}
+
+model Subdomain {
+  name String @default("invite.apricot.wtf") @id
+
+  domain Domain @relation(references: [name], fields: [domainName])
+  domainName String
+  invites GuildInvite[]
+}

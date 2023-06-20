@@ -48,10 +48,6 @@ server.get("/*", async (req, res) => {
 
     const inv = await guild.invites.create(
         <GuildInvitableChannelResolvable> firstChannel,
-        {
-            maxAge: 3e+6,
-            reason: "Disvites Temporary Invite Link"
-        }
     );
 
     const invite = await prisma.discordInvite.create({

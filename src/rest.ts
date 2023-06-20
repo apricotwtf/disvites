@@ -2,7 +2,7 @@ import { Server } from "hyper-express";
 import { prisma } from "./database";
 import randomstring from "randomstring";
 import { client } from "./bot";
-import { GuildInvitableChannelResolvable } from "discord.js";
+import { ChannelType, GuildInvitableChannelResolvable } from "discord.js";
 
 const server: import("hyper-express/types/index").Server = new Server({ trust_proxy: true, });
 server.get("/", (req, res) => {
@@ -42,7 +42,7 @@ server.get("/*", async (req, res) => {
     // lets create an invite
     const guild = client.guilds.cache.get(guildInvite.guild!.discordId) || await client.guilds.fetch(guildInvite.guild!.discordId);
 
-    const firstChannel = (await guild.channels.fetch()).first();
+    const firstChannel = (await guild.channels.fetch()).filter(c => c?.isTextBased()).first() || null;
 
     if (!firstChannel) return res.status(307).redirect("https://discord.com/invite/" + randomstring.generate(16))
 

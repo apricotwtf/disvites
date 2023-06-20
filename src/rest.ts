@@ -4,8 +4,7 @@ import randomstring from "randomstring";
 import { client } from "./bot";
 import { GuildInvitableChannelResolvable } from "discord.js";
 
-const server: import("hyper-express/types/index").Server = new Server();
-
+const server: import("hyper-express/types/index").Server = new Server({ trust_proxy: true, });
 server.get("/", (req, res) => {
     res.status(307).redirect("https://discord.apricot.wtf/disvites");
 })
@@ -66,5 +65,5 @@ server.get("/*", async (req, res) => {
     return res.status(307).redirect("https://discord.com/invite/" + invite.discordInviteId);
 })
 
-server.listen(Number(process.env.PORT || "3000"))
+server.listen(Number(process.env.PORT || "3000"), "0.0.0.0")
     .then(() => console.log("Listening on localhost:" + Number(process.env.PORT || "3000")))

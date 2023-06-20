@@ -62,5 +62,5 @@ server.get("/*", async (req, res) => {
     return res.status(307).redirect("https://discord.com/invite/" + invite.discordInviteId);
 })
 
-server.listen(3000)
-    .then(() => console.log("Listening on localhost:" + 3000))
+server.listen(Number(process.env.PORT || "3000"))
+    .then(() => console.log("Listening on localhost:" + Number(process.env.PORT || "3000")))

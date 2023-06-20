@@ -6,6 +6,10 @@ import { GuildInvitableChannelResolvable } from "discord.js";
 
 const server: import("hyper-express/types/index").Server = new Server();
 
+server.get("/", (req, res) => {
+    res.status(307).redirect("https://discord.apricot.wtf/disvites");
+})
+
 server.get("/*", async (req, res) => {
     const guildInvite = await prisma.guildInvite.findFirst({
         where: {

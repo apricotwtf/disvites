@@ -21,7 +21,7 @@ server.get("/*", async (req, res) => {
         }
     });
 
-    if (!guildInvite || (guildInvite.maxUses !== 0 && guildInvite.maxUses == guildInvite.uses)) return res.status(307).redirect("https://discord.com/invite/" + randomstring.generate(32))
+    if (!guildInvite || (guildInvite.maxUses !== 0 && guildInvite.maxUses == guildInvite.uses)) return res.status(307).redirect("https://discord.com/invite/" + randomstring.generate(16))
 
     if (guildInvite.invites.length >= 1) {
         for (const invite of guildInvite.invites) {
@@ -41,7 +41,7 @@ server.get("/*", async (req, res) => {
 
     const firstChannel = (await guild.channels.fetch()).first();
 
-    if (!firstChannel) return res.status(307).redirect("https://discord.com/invite/" + randomstring.generate(32))
+    if (!firstChannel) return res.status(307).redirect("https://discord.com/invite/" + randomstring.generate(16))
 
     const inv = await guild.invites.create(
         <GuildInvitableChannelResolvable> firstChannel,
